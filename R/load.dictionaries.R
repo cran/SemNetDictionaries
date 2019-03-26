@@ -1,19 +1,22 @@
 #' Load Dictionaries
-#' @description A wrapper function for to load text dictionaries into
-#' \code{\link{SemNetCleaner}}. Searches for dictionaries in 
-#' \code{\link{SemNetDictionaries}} and on your computer. Outputs 
-#' a word list that is combined from all dictionaries entered 
+#' @description A wrapper function to load dictionaries into
+#' the 'SemNetCleaner' package. Searches for dictionaries in \code{R}'s global
+#' environment, the \code{\link{SemNetDictionaries}} package, and on your computer.
+#' Outputs a unique word list that is combined from all dictionaries entered 
 #' in the \code{dictionary} argument
 #' 
 #' @param dictionary Character vector.
-#' Dictionaries to load.
+#' Dictionaries to load
 #' 
-#' \code{\link[SemNetDictionaries]{dictionaries}} will identify dictionaries in \code{\link{SemNetDictionaries}}
+#' Dictionaries in your global environment
+#' MUST be objects called \code{"*.dictionary"} (see examples).
+#' 
+#' \code{\link[SemNetDictionaries]{dictionaries}} will identify dictionaries in the \code{\link{SemNetDictionaries}} package
 #' 
 #' \code{\link[SemNetDictionaries]{find.dictionaries}} will identify dictionaries on your computer
 #' 
-#' @return Returns a vector of words that has been combined
-#' and alphabetized from specified dictionaries
+#' @return Returns a vector of unique words that have been combined
+#' and alphabetized from the specified dictionaries
 #' 
 #' @examples 
 #' #find dictionaries to load
@@ -21,6 +24,15 @@
 #' 
 #' #load "animals" dictionary
 #' load.dictionaries("animals")
+#' 
+#' #create a dictionary
+#' new.dictionary <- append.dictionary(c("words", "are", "fun"))
+#' 
+#' #load created dictionary
+#' load.dictionaries("new")
+#' 
+#' #load animals and new dictionary
+#' load.dictionaries(c("animals", "new")) 
 #' 
 #' @author Alexander Christensen <alexpaulchristensen@gmail.com>
 #' 
@@ -35,14 +47,17 @@ load.dictionaries <- function (dictionary)
     {dict.list <- list(dictionary)
     }else{
         
-        #first look in 'SemNetDictionaries' dictionaries
-        sndict <- SemNetDictionaries::dictionaries()
+        #initialize dictionary list
+        dict.list <- list()
         
-        if(all(dictionary %in% sndict))
+        #first look in 'SemNetDictionaries' and environment dictionaries
+        sndict <- SemNetDictionaries::dictionaries()
+        #grab dictonaries from environment and remove ".dictionary"
+        envdict <- gsub(".dictionary","",ls(envir=.GlobalEnv)[grep(".dictionary",ls(envir=.GlobalEnv))])
+        snenvdict <- c(sndict,envdict)
+        
+        if(all(dictionary %in% snenvdict))
         {
-            #initialize dictionary list
-            dict.list <- list()
-            
             for(i in 1:length(dictionary))
             {
                 #remove any .dictionary if added by user
@@ -58,18 +73,19 @@ load.dictionaries <- function (dictionary)
                     #load dictionary data
                     dict.list[[i]] <- get(data(list = dict.long,envir = environment()))
                     
+                }else if(dict %in% envdict)
+                {
+                    #get dictionary from environment
+                    dict.list[[i]] <- get(dict.long)
                 }
             }
         }else{
-            
-            #initialize dictionary list
-            dict.list <- list()
             
             #update dictionaries with user-defined dictionaries
             find.dict <- SemNetDictionaries::find.dictionaries()
             name.dict <- find.dict$names
             path.dict <- find.dict$files
-            sndict <- SemNetDictionaries::dictionaries()
+            envdict <- gsub(".dictionary","",ls(envir=.GlobalEnv)[grep(".dictionary",ls(envir=.GlobalEnv))])
             
             #identify number of dictionaries
             for(i in 1:length(dictionary))
@@ -95,6 +111,11 @@ load.dictionaries <- function (dictionary)
                     #load dictionary data
                     dict.list[[i]] <- readRDS(path.dict[target])
                     
+                }else if(dict %in% envdict)
+                {
+                    #get dictionary from environment
+                    dict.list[[i]] <- get(dict.long)
+                
                 }else{message(paste(dict,"was not found in existing dictionaries.",sep=" "))}
             }
         }

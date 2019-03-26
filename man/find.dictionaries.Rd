@@ -10,11 +10,12 @@ find.dictionaries(...)
 \item{...}{Vector.
 Appendix dictionary files names (if they are known).
 If left empty, the function will search across
-all files for files that end in *.dictionary.rds.
-This search takes about 30 seconds to complete}
+all files for files that end in \code{*.dictionary.rds}.
+This search takes about 30 seconds to complete
+(see examples for your computer's exact timing)}
 }
 \value{
-\item{names}{Returns the names of the appendix dictionary file(s)}
+\item{names}{Returns the names of the appendix dictionary file(s) found on your computer}
 
 \item{files}{Returns the dictionary file(s) that are stored in each given path. If there is no output
 (e.g., \code{character(0)}), then no appendix dictionary file exists
@@ -23,15 +24,6 @@ This search takes about 30 seconds to complete}
 \description{
 A wrapper function to identify the save location
 of appendix dictionaries from \code{\link[SemNetDictionaries]{append.dictionary}}
-}
-\details{
-This function identifies where the
-\code{\link[SemNetDictionaries]{append.dictionary}} function
-has stored appendix dictionaries. The default for the
-\code{\link[SemNetDictionaries]{append.dictionary}} function
-is to store dictionaries in your temporary \code{R} data folder.
-If you do not know where this is, a path is provided to you
-in the output of this function (see \code{files} below).
 }
 \examples{
 \dontrun{
@@ -46,10 +38,13 @@ Sys.time() - t0
 }
 
 #Make a dictionary
-append.dictionary(c("words","are","fun"), save.location = "path", path = tempdir())
+append.dictionary(c("words","are","fun"),
+dictionary.name = "example",
+save.location = "path",
+path = tempdir())
 
 #Dictionary can now be found
-find.dictionaries("appendix")
+find.dictionaries("example")
 
 }
 \seealso{
