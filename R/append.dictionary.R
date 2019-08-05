@@ -1,7 +1,7 @@
 #' Appendix Dictionary
 #' @description A function designed to create post-hoc dictionaries in the
 #' \code{\link{SemNetDictionaries}} package. This allows for new semantic categories or word lists
-#' to be saved for future use (i.e., your own perosnality dictionary).
+#' to be saved for future use (i.e., your own personal dictionary).
 #' Dictionaries created using this function can either be saved as an R object to your global
 #' environment or as a .rds file on your current computer. Open-source community-derived
 #' dictionaries can be uploaded to and downloaded from
@@ -14,7 +14,7 @@
 #' Name of dictionary to create or add words to.
 #' Defaults to \code{"appendix"}.
 #' Input a name to create or add to an existing dictionary.
-#' This function with automaticaly name files with the \code{"*.dictionary.rds"} suffix
+#' This function with automatically name files with the \code{"*.dictionary.rds"} suffix
 #' 
 #' @param save.location Character.
 #' A choice for where to store appendix dictionary.
@@ -25,8 +25,14 @@
 #' \item{\code{"envir"}:}
 #' {Returns dictionary as a vector object to \code{R}'s global environment}
 #' 
+#' \item{\code{"package"}:}
+#' {Saves dictionary to the package
+#' (see \code{system.file("data",package="SemNetDictionaries")} for location).
+#' Note that this dictionary will be deleted when \code{\link{SemNetDictionaries}}
+#' is updated.}
+#' 
 #' \item{\code{"choose"}:}
-#' {User chooses a directory for more permenant storage. This will
+#' {User chooses a directory for more permanent storage. This will
 #' allow you to use this dictionary in the future}
 #' 
 #' \item{\code{"path"}:}
@@ -98,7 +104,7 @@
 #' \href{https://github.com/AlexChristensen/SemNetDictionaries}{AlexChristensen/SemNetDictionaries}.
 #' 
 #' @examples
-#' #create a dictionary
+#' # Create a dictionary
 #' new.dictionary <- append.dictionary(c("words","are","fun"), save.location = "envir")
 #' 
 #' @author Alexander Christensen <alexpaulchristensen@gmail.com>
@@ -113,7 +119,7 @@
 #Appendix Dictionary
 append.dictionary <- function(...,
                               dictionary.name = "appendix",
-                              save.location = c("envir","choose","path"),
+                              save.location = c("envir","package","choose","path"),
                               path = NULL)
 {
     #grab words
@@ -134,8 +140,12 @@ append.dictionary <- function(...,
         
     }else if(save.location != "envir")
     {
-        
-        if(save.location == "choose")
+        if(save.location == "package")
+        {
+            #path to package
+            path <- system.file("Data", package = "SemNetDictionaries")
+            
+        }else if(save.location == "choose")
         {
             #let user select path
             path <- tcltk::tk_choose.dir()
@@ -194,6 +204,19 @@ append.dictionary <- function(...,
             #give back updated words
             return(append.words)
             
+        }
+        else if(save.location == "package")
+        {
+            #save as updated appendix dictionary
+            saveRDS(append.words, file = file.path(paste(sav.loc,append.data,sep="\\")))
+            
+            #let user know that the dictionary has been updated
+            message(paste(append.data," has been updated.",sep=""))
+            
+            #let user know package will be deleted when package updates
+            message(paste("This dictionary will be deleted when 'SemNetDictionaries'
+                          updates. It's recommended to save copy elsewhere"))
+            
         }else if(save.location == "choose")
         {
             #ask if user would like to save dictionary
@@ -236,6 +259,20 @@ append.dictionary <- function(...,
         {
             #give back words
             return(append.words)
+            
+        }
+        else if(save.location == "package")
+        {
+            #save as new appendix dictionary
+            saveRDS(append.words, file = file.path(paste(sav.loc,append.data,sep="\\")))
+            
+            #let user know that a new file has been saved
+            message(paste("A new dictionary file was created in:\n",
+                          paste(sav.loc,append.data,sep="\\"),"\n"))
+            
+            #let user know package will be deleted when package updates
+            message(paste("This dictionary will be deleted when 'SemNetDictionaries'
+                          updates. It's recommended to save copy elsewhere"))
             
         }else if(save.location == "choose")
         {
