@@ -47,6 +47,11 @@
 #' A path to an existing directory.
 #' Only necessary for \code{save.location = "path"}
 #' 
+#' @param textcleaner Boolean.
+#' Argument for skipping asking to save the dictionary twice.
+#' Defaults to \code{FALSE}.
+#' If \code{TRUE}, then asking to save the dictionary will be skipped.
+#' 
 #' @details Appendix dictionaries are useful for storing spelling
 #' definitions that are not available in the \code{\link{SemNetDictionaries}}
 #' package. This function enables the storage of personalized dictionaries,
@@ -120,7 +125,8 @@
 append.dictionary <- function(...,
                               dictionary.name = "appendix",
                               save.location = c("envir","package","choose","path"),
-                              path = NULL)
+                              path = NULL,
+                              textcleaner = FALSE)
 {
     #grab words
     words <- list(...)
@@ -204,23 +210,12 @@ append.dictionary <- function(...,
             #give back updated words
             return(append.words)
             
-        }
-        else if(save.location == "package")
-        {
-            #save as updated appendix dictionary
-            saveRDS(append.words, file = file.path(paste(sav.loc,append.data,sep="\\")))
-            
-            #let user know that the dictionary has been updated
-            message(paste(append.data," has been updated.",sep=""))
-            
-            #let user know package will be deleted when package updates
-            message(paste("This dictionary will be deleted when 'SemNetDictionaries'
-                          updates. It's recommended to save copy elsewhere"))
-            
         }else if(save.location == "choose")
         {
             #ask if user would like to save dictionary
-            ans <- menu(c("Yes","No"),title="Would you like to update your saved dictionary?")
+            if(!textcleaner)
+            {ans <- menu(c("Yes","No"),title="Would you like to update your saved dictionary?")
+            }else{ans <- 1}
             
             if(ans == 1)
             {
@@ -260,24 +255,12 @@ append.dictionary <- function(...,
             #give back words
             return(append.words)
             
-        }
-        else if(save.location == "package")
-        {
-            #save as new appendix dictionary
-            saveRDS(append.words, file = file.path(paste(sav.loc,append.data,sep="\\")))
-            
-            #let user know that a new file has been saved
-            message(paste("A new dictionary file was created in:\n",
-                          paste(sav.loc,append.data,sep="\\"),"\n"))
-            
-            #let user know package will be deleted when package updates
-            message(paste("This dictionary will be deleted when 'SemNetDictionaries'
-                          updates. It's recommended to save copy elsewhere"))
-            
         }else if(save.location == "choose")
         {
             #ask if user would like to save dictionary
-            ans <- menu(c("Yes","No"),title="Would you like to save your appendix dictionary?")
+            if(!textcleaner)
+            {ans <- menu(c("Yes","No"),title="Would you like to save your appendix dictionary?")
+            }else{ans <- 1}
             
             if(ans == 1)
             {

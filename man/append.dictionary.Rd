@@ -5,7 +5,8 @@
 \title{Appendix Dictionary}
 \usage{
 append.dictionary(..., dictionary.name = "appendix",
-  save.location = c("envir", "package", "choose", "path"), path = NULL)
+  save.location = c("envir", "package", "choose", "path"), path = NULL,
+  textcleaner = FALSE)
 }
 \arguments{
 \item{...}{Character vector.
@@ -47,6 +48,11 @@ this dictionary in the future}
 \item{path}{Character.
 A path to an existing directory.
 Only necessary for \code{save.location = "path"}}
+
+\item{textcleaner}{Boolean.
+Argument for skipping asking to save the dictionary twice.
+Defaults to \code{FALSE}.
+If \code{TRUE}, then asking to save the dictionary will be skipped.}
 }
 \description{
 A function designed to create post-hoc dictionaries in the
