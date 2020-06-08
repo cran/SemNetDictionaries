@@ -4,9 +4,14 @@
 \alias{append.dictionary}
 \title{Appendix Dictionary}
 \usage{
-append.dictionary(..., dictionary.name = "appendix",
-  save.location = c("envir", "package", "choose", "path"), path = NULL,
-  textcleaner = FALSE)
+append.dictionary(
+  ...,
+  dictionary.name = "appendix",
+  save.location = c("envir", "wd", "choose", "path"),
+  path = NULL,
+  textcleaner = FALSE,
+  package = FALSE
+)
 }
 \arguments{
 \item{...}{Character vector.
@@ -27,11 +32,9 @@ Defaults to \code{"envir"}.
 \item{\code{"envir"}:}
 {Returns dictionary as a vector object to \code{R}'s global environment}
 
-\item{\code{"package"}:}
-{Saves dictionary to the package
-(see \code{system.file("data",package="SemNetDictionaries")} for location).
-Note that this dictionary will be deleted when \code{\link{SemNetDictionaries}}
-is updated.}
+\item{\code{"wd"}:}
+{Saves dictionary to working directory. Useful for storing dictionaries
+alongside projects}
 
 \item{\code{"choose"}:}
 {User chooses a directory for more permanent storage. This will
@@ -53,6 +56,10 @@ Only necessary for \code{save.location = "path"}}
 Argument for skipping asking to save the dictionary twice.
 Defaults to \code{FALSE}.
 If \code{TRUE}, then asking to save the dictionary will be skipped.}
+
+\item{package}{Boolean.
+Argument not meant for user use.
+Allows me to update the package's dictionaries efficiently}
 }
 \description{
 A function designed to create post-hoc dictionaries in the

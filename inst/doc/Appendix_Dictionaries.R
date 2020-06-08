@@ -1,8 +1,8 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 library(htmlTable)
 
-## ----tab1, echo = FALSE, eval = TRUE, comment = NA, warning = FALSE------
+## ----tab1, echo = FALSE, eval = TRUE, comment = NA, warning = FALSE-----------
 output <- matrix(c("animals", "1,021", "Category",
                    "fruits", "488", "Category",
                    "general", "370,103", "All-purpose",
