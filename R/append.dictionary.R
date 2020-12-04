@@ -124,7 +124,7 @@
 #' 
 #' @export
 # Appendix Dictionary
-# Updated 23.09.2020
+# Updated 29.11.2020
 append.dictionary <- function(...,
                               dictionary.name = "appendix",
                               save.location = c("envir","wd","choose","path"),
@@ -134,18 +134,23 @@ append.dictionary <- function(...,
 {
     #get words
     word.list <- list(...)
-    words <- unlist(list(...))
+    words <- unlist(word.list)
     
     #get names
     name <- as.character(substitute(list(...)))
     name <- name[-which(name=="list")]
-    
-    #check for dictionaries
     dicts <- grep(".dictionary", name)
     
-    #get dictionary words
-    if(length(dicts) != 0)
-    {dict.words <- sort(unique(unlist(word.list[dicts])))}
+    #check for dictionaries
+    if(textcleaner){
+        if(length(dicts) != 0){
+            #get dictionary words
+            dict.words <- sort(unique(unlist(word.list[dicts])))
+            
+            #separate new words
+            new.words <- setdiff(words, dict.words)
+        }else{new.words <- words}
+    }
     
     #check if package
     if(package)
@@ -225,7 +230,9 @@ append.dictionary <- function(...,
     if(append.data %in% sav.files)
     {
         #put new words into vector
-        new.words <- unlist(words)
+        if(!textcleaner){
+            new.words <- unlist(words)
+        }
         
         #make them lower case
         new.words <- tolower(new.words)
@@ -262,8 +269,9 @@ append.dictionary <- function(...,
         }else if(save.location == "choose")
         {
             #ask if user would like to save dictionary
-            if(!textcleaner)
-            {ans <- menu(c("Yes","No"),title="Would you like to update your saved dictionary?")
+            if(!textcleaner){
+                
+                ans <- yes.no.menu(title = "Update your dictionary")
             }else{ans <- 1}
             
             if(ans == 1)
@@ -314,7 +322,7 @@ append.dictionary <- function(...,
         {
             #ask if user would like to save dictionary
             if(!textcleaner)
-            {ans <- menu(c("Yes","No"),title="Would you like to save your appendix dictionary?")
+            {ans <- yes.no.menu(title = "Save your dictionary")
             }else{ans <- 1}
             
             if(ans == 1)
