@@ -257,6 +257,7 @@ if (window.hljs) {
 div.csl-bib-body { }
 div.csl-entry {
 clear: both;
+margin-bottom: 0em;
 }
 .hanging div.csl-entry {
 margin-left:2em;
@@ -406,8 +407,9 @@ possible verbal fluency categories.</p>
 <table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
 <thead>
 <tr>
-<td colspan="3" style="text-align: left;">
-Table 1. Dictionaries in SemNetDictionaries
+<td colspan="4" style="text-align: left;">
+Table 1. Dictionaries in SemNetDictionaries (monikers are the number of
+words that have variants)
 </td>
 </tr>
 <tr>
@@ -416,6 +418,9 @@ Dictionary
 </th>
 <th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
 Entries
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Monikers
 </th>
 <th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
 Type
@@ -428,7 +433,10 @@ Type
 animals
 </td>
 <td style="text-align: center;">
-1252
+1285
+</td>
+<td style="text-align: center;">
+340
 </td>
 <td style="text-align: center;">
 Category
@@ -439,7 +447,10 @@ Category
 fruits
 </td>
 <td style="text-align: center;">
-488
+481
+</td>
+<td style="text-align: center;">
+79
 </td>
 <td style="text-align: center;">
 Category
@@ -453,6 +464,9 @@ general
 369327
 </td>
 <td style="text-align: center;">
+-
+</td>
+<td style="text-align: center;">
 All-purpose
 </td>
 </tr>
@@ -461,7 +475,10 @@ All-purpose
 good
 </td>
 <td style="text-align: center;">
-284
+316
+</td>
+<td style="text-align: center;">
+41
 </td>
 <td style="text-align: center;">
 Synonym
@@ -472,7 +489,10 @@ Synonym
 hot
 </td>
 <td style="text-align: center;">
-281
+273
+</td>
+<td style="text-align: center;">
+64
 </td>
 <td style="text-align: center;">
 Synonym
@@ -483,7 +503,10 @@ Synonym
 jobs
 </td>
 <td style="text-align: center;">
-1471
+1023
+</td>
+<td style="text-align: center;">
+152
 </td>
 <td style="text-align: center;">
 Category
@@ -494,7 +517,10 @@ Category
 vegetables
 </td>
 <td style="border-bottom: 2px solid grey; text-align: center;">
-284
+340
+</td>
+<td style="border-bottom: 2px solid grey; text-align: center;">
+70
 </td>
 <td style="border-bottom: 2px solid grey; text-align: center;">
 Category
@@ -524,7 +550,37 @@ load.dictionaries(&quot;fruits&quot;, &quot;vegetables&quot;)</code></pre>
 dictionaries as are entered. The function will alphabetically sort and
 remove any duplicates found between the dictionaries. Thus, it returns
 an alphabetized vector the length of the unique words in the
-dictionaries.</p>
+dictionaries. Dictionaries from the package are only prepared once per
+session, so loading them again is fast. A dictionary that cannot be
+found gives a warning (of class
+<code>semnet_dictionary_not_found</code>) and is left out. Besides the
+package, dictionaries are looked for in your global environment (objects
+called <code>*.dictionary</code>) and in files called
+<code>*.dictionary.rds</code> in the directory given in
+<code>add.path</code>, the working directory, and
+<code>tempdir()</code>.</p>
+</div>
+<div id="monikers" class="section level2">
+<h2>Monikers</h2>
+<p>Each category and synonym dictionary has a moniker glossary, which
+lists variants (common misspellings, plurals, spelling and spacing
+variants, and alternate names) for the words in the dictionary. A
+variant is converted to its target word, and a variant is never also an
+entry in the dictionary because responses that are in the dictionary are
+accepted as they are:</p>
+<pre class="r"><code># Variants as a vector (names are the target word, numbered when there is more than one variant)
+head(load.monikers(&quot;animals&quot;))</code></pre>
+<pre><code> airedale terrier        albatross1        albatross2        albatross3 
+&quot;airdale terrier&quot;        &quot;albatros&quot;       &quot;albatrose&quot;       &quot;albitross&quot; 
+       alligator4        alligator2 
+       &quot;alegator&quot;        &quot;aligator&quot; </code></pre>
+<pre class="r"><code># Variants of each word as a list
+load.monikers(&quot;animals&quot;, vector = FALSE)[c(&quot;alligator&quot;, &quot;binturong&quot;)]</code></pre>
+<pre><code>$alligator
+[1] &quot;gator&quot;     &quot;aligator&quot;  &quot;allegator&quot; &quot;alegator&quot;  &quot;alligater&quot;
+
+$binturong
+[1] &quot;bear cat&quot;  &quot;bare cat&quot;  &quot;binterong&quot; &quot;benterong&quot; &quot;benturong&quot;</code></pre>
 </div>
 <div id="custom-dictionaries" class="section level2">
 <h2>Custom dictionaries</h2>
@@ -565,7 +621,7 @@ is done in the next section).</p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
 <div id="ref-christensen2019semna" class="csl-entry">
 Christensen, A. P., &amp; Kenett, Y. N. (under review). Semantic network
 analysis <span>(SemNA)</span>: A tutorial on preprocessing, estimating,

@@ -4,19 +4,24 @@ library(htmlTable)
 library(SemNetDictionaries)
 
 ## ----tab1, echo = FALSE, eval = TRUE, comment = NA, warning = FALSE-----------
-output <- matrix(c("animals", length(animals.dictionary), "Category",
-                   "fruits", length(fruits.dictionary), "Category",
-                   "general", length(general.dictionary), "All-purpose",
-                   "good", length(good.dictionary), "Synonym",
-                   "hot", length(hot.dictionary), "Synonym",
-                   "jobs", length(jobs.dictionary), "Category",
-                   "vegetables", length(vegetables.dictionary), "Category"),
-                 ncol = 3, byrow = TRUE)
+n_monikers <- function(name)
+{
+    length(load.monikers(name, vector = FALSE))
+}
+
+output <- matrix(c("animals", length(animals.dictionary), n_monikers("animals"), "Category",
+                   "fruits", length(fruits.dictionary), n_monikers("fruits"), "Category",
+                   "general", length(general.dictionary), "-", "All-purpose",
+                   "good", length(good.dictionary), n_monikers("good"), "Synonym",
+                   "hot", length(hot.dictionary), n_monikers("hot"), "Synonym",
+                   "jobs", length(jobs.dictionary), n_monikers("jobs"), "Category",
+                   "vegetables", length(vegetables.dictionary), n_monikers("vegetables"), "Category"),
+                 ncol = 4, byrow = TRUE)
 
 
 htmlTable(output,
-          header = c("Dictionary", "Entries", "Type"),
-          caption = "Table 1. Dictionaries in SemNetDictionaries")
+          header = c("Dictionary", "Entries", "Monikers", "Type"),
+          caption = "Table 1. Dictionaries in SemNetDictionaries (monikers are the number of words that have variants)")
 
 ## ----Load dictionary, echo = TRUE, eval = FALSE, comment = NA, warning = FALSE----
 # # Check for available dictionaries
@@ -27,6 +32,13 @@ htmlTable(output,
 # load.dictionaries("f")
 # # Load multiple dictionaries
 # load.dictionaries("fruits", "vegetables")
+
+## ----Load monikers, echo = TRUE, eval = TRUE, comment = NA, warning = FALSE----
+# Variants as a vector (names are the target word, numbered when there is more than one variant)
+head(load.monikers("animals"))
+
+# Variants of each word as a list
+load.monikers("animals", vector = FALSE)[c("alligator", "binturong")]
 
 ## ----Create dictionary, echo = TRUE, eval = FALSE, comment = NA, warning = FALSE----
 # # Create a custom dictionary

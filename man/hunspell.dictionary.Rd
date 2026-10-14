@@ -5,14 +5,13 @@
 \alias{hunspell.dictionary}
 \title{hunspell Dictionary}
 \format{
-hunspell.dictionary (vector, length = 62893)
+hunspell.dictionary (vector, length = \Sexpr[results=text,stage=render]{length(SemNetDictionaries::hunspell.dictionary)})
 }
 \usage{
 data(hunspell.dictionary)
 }
 \description{
-A general dictionary of over 62,000 words from the hunspell dictionary derived from
-\href{http://wordlist.aspell.net/dicts/}{http://wordlist.aspell.net/dicts/}.
+A general dictionary of over 62,000 words from the hunspell dictionary derived from wordlist.aspell.net/dicts/.
 }
 \details{
 To add additional words to the dictionary, please make an
